@@ -1082,3 +1082,71 @@ function initCarousel() {
     // Start autoplay
     startAutoplay();
 }
+
+
+// Event Heads Search and Filter
+function initEventHeads() {
+    const searchInput = document.getElementById('eventHeadSearch');
+    const filterTabs = document.querySelectorAll('.filter-tab');
+    const eventHeadCards = document.querySelectorAll('.event-head-card');
+    const noResults = document.getElementById('noResults');
+    const eventHeadsList = document.getElementById('eventHeadsList');
+
+    let currentFilter = 'all';
+    let currentSearch = '';
+
+    // Search functionality
+    if (searchInput) {
+        searchInput.addEventListener('input', function (e) {
+            currentSearch = e.target.value.toLowerCase().trim();
+            filterEventHeads();
+        });
+    }
+
+    // Filter tab functionality
+    filterTabs.forEach(tab => {
+        tab.addEventListener('click', function () {
+            // Update active state
+            filterTabs.forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+
+            // Update current filter
+            currentFilter = this.dataset.filter;
+            filterEventHeads();
+        });
+    });
+
+    function filterEventHeads() {
+        let visibleCount = 0;
+
+        eventHeadCards.forEach(card => {
+            const category = card.dataset.category;
+            const name = card.dataset.name.toLowerCase();
+            const event = card.dataset.event.toLowerCase();
+
+            // Check filter
+            const matchesFilter = currentFilter === 'all' || category === currentFilter;
+
+            // Check search
+            const matchesSearch = currentSearch === '' ||
+                name.includes(currentSearch) ||
+                event.includes(currentSearch);
+
+            if (matchesFilter && matchesSearch) {
+                card.classList.remove('hidden');
+                visibleCount++;
+            } else {
+                card.classList.add('hidden');
+            }
+        });
+
+        // Show/hide no results message
+        if (visibleCount === 0) {
+            noResults.style.display = 'block';
+            eventHeadsList.style.display = 'none';
+        } else {
+            noResults.style.display = 'none';
+            eventHeadsList.style.display = 'flex';
+        }
+    }
+}
