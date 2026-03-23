@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 // ===== Countdown Timer =====
 function initCountdown() {
-    const targetDate = new Date('2026-03-27T09:00:00').getTime();
+    const targetDate = new Date('2026-03-27T10:00:00').getTime();
 
     function updateCountdown() {
         const now = new Date().getTime();
